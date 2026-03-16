@@ -4,16 +4,49 @@
 <meta charset="UTF-8">
 <title>貨物追蹤查詢</title>
 <style>
-body { font-family: 微軟正黑體; font-size: 20px; padding: 1%; }
-h6 { color: red; }
-#order_status div { margin: 10px 0; border: 1px solid #ccc; padding: 10px; border-radius: 5px; }
-input[type="button"] { padding: 10px 20px; font-size: 18px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px; }
-input[type="button"]:hover { background-color: #45a049; }
-input[type="text"] { padding: 10px; font-size: 18px; width: 300px; }
-table { table-layout: auto; width: 100%; border-collapse: collapse; }
-td, th { border: 1px solid #ccc; word-wrap: break-word; padding: 5px; }
+body {
+    font-family: 微軟正黑體;
+    font-size: 20px;
+    padding: 1%;
+}
+h6 {
+    color: red;
+}
+input[type="button"] {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+input[type="button"]:hover {
+    background-color: #45a049;
+}
+input[type="text"] {
+    padding: 10px;
+    font-size: 18px;
+    width: 300px;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 15px;
+}
+td {
+    border: 1px solid #ccc;
+    padding: 5px;
+    word-wrap: break-word;
+}
+td:first-child {
+    font-weight: bold;
+    width: 30%;
+}
 </style>
 <script>
+// 日期格式化
 Date.prototype.format = function(fmt) {
     var o = {
         "M+": this.getMonth() + 1,
@@ -25,17 +58,72 @@ Date.prototype.format = function(fmt) {
         "q+": Math.floor((this.getMonth() + 3) / 3),
         "S": this.getMilliseconds()
     };
-    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
     for (var k in o)
         if (new RegExp("(" + k + ")").test(fmt))
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1)?(o[k]):(("00"+o[k]).substr((""+o[k]).length)));
     return fmt;
 }
+
+// 顯示當前時間
 function showCurrentTime() {
     var now = new Date();
     document.getElementById('current_time').innerText = now.format("yyyy-MM-dd HH:mm:ss");
 }
 setInterval(showCurrentTime, 1000);
+
+// JSON 日期轉換
+var dateReviver = function (key, value) {
+    var a;
+    if (typeof value === 'string') {
+        a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+        if (a) {
+            return new Date(Date.UTC(+a[1], +a[2]-1, +a[3], +a[4], +a[5], +a[6])).format("yyyy-MM-dd HH:mm:ss");
+        }
+    }
+    return value;
+};
+
+// 查詢
+function showHint(str) {
+    if(!str) return;
+    var url = "https://script.google.com/macros/s/AKfycbx1-2fSmyfjm1cTPMwqUoYAiWzsbgcmF8LJR0N7AMWWpCros3al47-yRqIrO9WaJI26/exec";
+    fetch(url + "?uid=" + encodeURIComponent(str))
+    .then(res => res.json())
+    .then(obj => {
+        if(obj.length === 1){
+            document.getElementById("order_status").innerHTML = "<h6>查無資料!<br>請聯絡客服<br>Tel:886-2-501-9887</h6>";
+            document.getElementById("uid").value = "";
+            return;
+        }
+        let html = "";
+        for(let i=1; i<obj.length; i++){
+            html += '<table>';
+            for(let j=0; j<obj[0].data.length; j++){
+                html += '<tr>';
+                html += `<td>${obj[0].data[j]}</td>`;
+                if(j===2)
+                    html += `<td style="color:black;">${obj[i].data[j]}</td>`;
+                else
+                    html += `<td>${obj[i].data[j]}</td>`;
+                html += '</tr>';
+            }
+            html += '</table>';
+        }
+        document.getElementById("order_status").innerHTML = html;
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("order_status").innerHTML = "<h6>資料讀取失敗，請稍後再試</h6>";
+    });
+}
+
+// 清除
+function cleanAll(){
+    document.getElementById("order_status").innerHTML = "";
+    document.getElementById("uid").value = "";
+}
 </script>
 </head>
 <body>
@@ -46,55 +134,5 @@ setInterval(showCurrentTime, 1000);
 <input type="button" value="查詢" onclick="showHint(uid.value);" />
 <input type="button" value="清除資料" onclick="cleanAll();" /><br/><br/>
 <span id="order_status"></span>
-
-<script>
-var dateReviver = function (key, value) {
-    var a;
-    if (typeof value === 'string') {
-        a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
-        if (a) {
-            return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6])).format("yyyy-MM-dd HH:mm:ss");
-        }
-    }
-    return value;
-};
-
-function showHint(str) {
-    var url = "https://script.google.com/macros/s/AKfycbx1-2fSmyfjm1cTPMwqUoYAiWzsbgcmF8LJR0N7AMWWpCros3al47-yRqIrO9WaJI26/exec"; // <-- 你的 Apps Script Web App URL
-    fetch(url + "?uid=" + encodeURIComponent(str))
-    .then(res => res.json())
-    .then(obj => {
-        let html = '<table>';
-        html += '<tr>';
-        obj[0].data.forEach(h => html += `<th>${h}</th>`);
-        html += '</tr>';
-
-        if(obj.length === 1) {
-            html = "<h6>查無資料!<br>請聯絡客服<br>Tel:886-2-501-9887</h6>";
-            document.getElementById("uid").value = "";
-        } else {
-            for (let i = 1; i < obj.length; i++) {
-                html += '<tr>';
-                obj[i].data.forEach((d,j) => {
-                    if(j==2) html += `<td><font color=black>${d}</font></td>`; 
-                    else html += `<td>${d}</td>`;
-                });
-                html += '</tr>';
-            }
-        }
-        html += '</table>';
-        document.getElementById("order_status").innerHTML = html;
-    })
-    .catch(err => {
-        console.error(err);
-        document.getElementById("order_status").innerHTML = "<h6>資料讀取失敗，請稍後再試</h6>";
-    });
-}
-
-function cleanAll() {
-    document.getElementById("order_status").innerHTML = "";
-    document.getElementById("uid").value = "";
-}
-</script>
 </body>
 </html>
