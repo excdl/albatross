@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>信天翁國際快遞貨物追蹤查詢</title>
+<title>貨物追蹤查詢 - 專業版</title>
 <style>
 /* ---------------- 基本排版 ---------------- */
 body {
@@ -13,26 +13,42 @@ body {
 }
 .container {
     max-width: 900px;
-    margin: 40px auto;
+    margin: 20px auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     border-radius: 8px;
     text-align: center;
 }
-h1, h2 {
+.logo {
+    max-width: 180px;
+    width: 50%;   /* 手機自動縮放 */
+    height: auto;
+    margin-bottom: 10px;
+}
+.company-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a73e8;
+    margin-bottom: 5px;
+}
+h1 {
+    font-size: 28px;
+    margin: 5px 0 15px 0;
     color: #333;
 }
 h4 {
     color: #555;
+    margin: 0 5px 0 0;
 }
 
 /* ---------------- 輸入區 ---------------- */
 .search-box {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    gap: 10px;
     margin: 20px 0;
-    gap: 10px; /* 按鈕間距 */
 }
 input[type="text"] {
     padding: 12px;
@@ -41,6 +57,7 @@ input[type="text"] {
     border: 1px solid #ccc;
     border-radius: 6px;
     outline: none;
+    flex: 1 1 200px;
 }
 input[type="button"] {
     padding: 12px 20px;
@@ -50,6 +67,7 @@ input[type="button"] {
     color: white;
     cursor: pointer;
     border-radius: 6px;
+    flex: 0 0 auto;
 }
 input[type="button"]:hover {
     background-color: #45a049;
@@ -77,15 +95,19 @@ input[type="button"]:hover {
 }
 .card-row {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     margin-bottom: 6px;
 }
 .card-label {
     color: #555;
     font-weight: 600;
+    flex: 1 1 40%;
 }
 .card-value {
     color: #000;
+    flex: 1 1 55%;
+    text-align: right;
 }
 
 /* ---------------- 無資料提示 ---------------- */
@@ -96,28 +118,60 @@ input[type="button"]:hover {
     margin-top: 30px;
 }
 
-/* ---------------- 當前時間置中 ---------------- */
+/* ---------------- 當前時間 ---------------- */
+.time-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
 #current_time {
     font-weight: bold;
     color: #444;
-    display: block;
-    text-align: center;
-    margin-bottom: 20px;
+}
+
+/* ---------------- 響應式 ---------------- */
+@media screen and (max-width: 600px) {
+    .card-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .card-value {
+        text-align: left;
+        margin-top: 3px;
+    }
+    input[type="text"] {
+        width: 100%;
+    }
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>貨物追蹤專業查詢</h1>
-    <h4>當前時間: <span id="current_time"></span></h4>
+    <!-- 公司 Logo -->
+    <img src="logo.png" alt="公司 Logo" class="logo">
 
+    <!-- 公司名稱 -->
+    <div class="company-name">信天翁國際快遞</div>
+
+    <!-- 網頁標題 -->
+    <h1>貨物追蹤專業查詢</h1>
+
+    <!-- 當前時間 -->
+    <div class="time-container">
+        <h4>當前時間:</h4>
+        <span id="current_time"></span>
+    </div>
+
+    <!-- 查詢區 -->
     <div class="search-box">
         <input type="text" id="uid" placeholder="請輸入提單號">
         <input type="button" value="查詢" onclick="showHint(uid.value);">
         <input type="button" value="清除資料" onclick="cleanAll();">
     </div>
 
+    <!-- 查詢結果 -->
     <div id="order_status"></div>
 </div>
 
@@ -161,7 +215,6 @@ function showHint(str){
             return;
         }
 
-        // 生成卡片式結果
         for(let i=1;i<obj.length;i++){
             let card = document.createElement("div");
             card.className="card";
