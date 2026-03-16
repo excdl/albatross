@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>貨物追蹤查詢 - GitHub Pages</title>
+<style>
+body { font-family: 微軟正黑體; font-size: 20px; padding: 1%; }
+h6 { color: red; }
+#order_status div { margin: 10px 0; border: 1px solid #ccc; padding: 10px; border-radius: 5px; }
+input[type="button"] { padding: 10px 20px; font-size: 18px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px; }
+input[type="button"]:hover { background-color: #45a049; }
+input[type="text"] { padding: 10px; font-size: 18px; width: 300px; }
+table { table-layout: auto; width: 100%; border-collapse: collapse; }
+td, th { border: 1px solid #ccc; word-wrap: break-word; padding: 5px; }
+</style>
+</head>
+<body>
+
+<h2>貨物追蹤查詢</h2>
+<h4>當前時間: <span id="current_time"></span></h4>
+<h4>輸入您追蹤的提單號</h4>
+<input type="text" id="uid"><br><br>
+<input type="button" value="查詢" onclick="showHint(uid.value)">
+<input type="button" value="清除資料" onclick="cleanAll()"><br><br>
+<span id="order_status"></span>
+
+<script>
+// ----- 顯示當前時間 -----
+function updateTime() {
+    const now = new Date();
+    document.getElementById("current_time").innerText = now.toLocaleString();
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+// ----- 設定試算表ID與工作表名稱 -----
+const SPREADSHEET_ID = "你的試算表ID"; // <-- 替換成你的試算表ID
+const SHEET_NAME = "資料庫"; // <-- 替換成你的工作表名稱
+
+// ----- 查詢函數 -----
+function showHint(uid) {
+    const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+
+    fetch(url)
+    .then(res => res.text())
+    .then(data => {
+        // 去掉 Google JSONP 外層
+        const jsonData = JSON.parse(data.match(/google\.visualization\.Query\.setResponse\((.*)\)/s)[1]);
+        const rows = jsonData.table.rows;
+        const cols = jsonData.table.cols;
+
+        // 計算30天前日期
+        const today = new Date();
+        const past30Days = new Date(today);
+        past30Days.setDate(today.getDate() - 30);
+
+        // 篩選符合 uid 且日期在過去30天內
+        const filtered = rows.filter(r => {
+            const uidMatch = r.c[0] && r.c[0].v == uid; // 假設UID在第一欄
+            let dateMatch = true;
+            if (r.c[3] && r.c[3].v) { // 假設日期在第4欄 (D)
+                const rowDate = new Date(r.c[3].v);
+                dateMatch = rowDate >= past30Days && rowDate <= today;
+            }
+            return uidMatch && dateMatch;
+        });
+
+        // 顯示表格
+        let html = '<table>';
+        // 表頭
+        html += '<tr>';
+        cols.forEach(c => html += `<th>${c.label}</th>`);
+        html += '</tr>';
+
+        if (filtered.length === 0) {
+            html = "<h6>查無資料!<br>請聯絡客服<br>Tel:886-2-501-9887</h6>";
+        } else {
+            filtered.forEach(r => {
+                html += '<tr>';
+                r.c.forEach(cell => {
+                    html += `<td>${cell ? cell.v : ''}</td>`;
+                });
+                html += '</tr>';
+            });
+        }
+
+        document.getElementById("order_status").innerHTML = html;
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("order_status").innerHTML = "<h6>資料讀取失敗，請稍後再試</h6>";
+    });
+}
+
+// ----- 清除 -----
+function cleanAll() {
+    document.getElementById("order_status").innerHTML = "";
+    document.getElementById("uid").value = "";
+}
+</script>
+
+</body>
+</html>
