@@ -20,13 +20,13 @@ body {
     text-align: center;
 }
 .company-name {
-    font-size: 36px; /* 公司名稱最大 */
+    font-size: 36px;
     font-weight: bold;
     color: #1a73e8;
     margin-bottom: 5px;
 }
 h1 {
-    font-size: 28px; /* 查詢標題次之 */
+    font-size: 28px;
     margin: 5px 0 15px 0;
     color: #333;
 }
@@ -34,7 +34,7 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 4px; /* 間距縮小 */
     margin-bottom: 20px;
 }
 #current_time {
@@ -94,10 +94,13 @@ input[type="button"]:hover {
     flex: 1 1 40%;
 }
 .card-value {
-    color: #000;
     flex: 1 1 55%;
     text-align: right;
 }
+.status-received { color: green; font-weight: bold; }
+.status-exported { color: orange; font-weight: bold; }
+.status-delivering { color: #ff6600; font-weight: bold; }
+.status-signed { color: blue; font-weight: bold; }
 .no-data {
     text-align: center;
     color: red;
@@ -127,11 +130,11 @@ input[type="button"]:hover {
     <div class="company-name">信天翁國際快遞</div>
 
     <!-- 標題 -->
-    <h1>貨物追蹤專業查詢</h1>
+    <h1>貨物追蹤查詢</h1>
 
     <!-- 當前時間 -->
     <div class="time-container">
-        <h4>當前時間:</h4>
+        <span>當前時間:</span>
         <span id="current_time"></span>
     </div>
 
@@ -203,14 +206,20 @@ function showHint(str){
                 label.textContent=obj[0].data[j];
                 let value=document.createElement("div");
                 value.className="card-value";
-                value.textContent=obj[i].data[j];
+                let cellValue=obj[i].data[j];
 
-                // 若是日期欄位，自動轉 yyyy-MM-dd HH:mm:ss
-                if(!isNaN(Date.parse(obj[i].data[j]))){
-                    value.textContent=new Date(obj[i].data[j]).format("yyyy-MM-dd HH:mm:ss");
+                // 自動日期格式
+                if(!isNaN(Date.parse(cellValue))){
+                    cellValue=new Date(cellValue).format("yyyy-MM-dd HH:mm:ss");
                 }
 
-                if(j===2) value.style.color="black";
+                // 狀態顏色判斷
+                if(cellValue.includes("已收貨")) value.className+=" status-received";
+                else if(cellValue.includes("已出口")) value.className+=" status-exported";
+                else if(cellValue.includes("派件中")) value.className+=" status-delivering";
+                else if(cellValue.includes("簽收")) value.className+=" status-signed";
+
+                value.textContent=cellValue;
                 row.appendChild(label);
                 row.appendChild(value);
                 card.appendChild(row);
