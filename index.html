@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>貨物追蹤查詢 - GitHub Pages</title>
+<title>貨物追蹤查詢</title>
 <style>
 body { font-family: 微軟正黑體; font-size: 20px; padding: 1%; }
 h6 { color: red; }
@@ -13,77 +13,76 @@ input[type="text"] { padding: 10px; font-size: 18px; width: 300px; }
 table { table-layout: auto; width: 100%; border-collapse: collapse; }
 td, th { border: 1px solid #ccc; word-wrap: break-word; padding: 5px; }
 </style>
+<script>
+Date.prototype.format = function(fmt) {
+    var o = {
+        "M+": this.getMonth() + 1,
+        "d+": this.getDate(),
+        "h+": this.getHours() % 12 == 0 ? 12 : this.getHours() % 12,
+        "H+": this.getHours(),
+        "m+": this.getMinutes(),
+        "s+": this.getSeconds(),
+        "q+": Math.floor((this.getMonth() + 3) / 3),
+        "S": this.getMilliseconds()
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1)?(o[k]):(("00"+o[k]).substr((""+o[k]).length)));
+    return fmt;
+}
+function showCurrentTime() {
+    var now = new Date();
+    document.getElementById('current_time').innerText = now.format("yyyy-MM-dd HH:mm:ss");
+}
+setInterval(showCurrentTime, 1000);
+</script>
 </head>
 <body>
-
 <h2>貨物追蹤查詢</h2>
 <h4>當前時間: <span id="current_time"></span></h4>
 <h4>輸入您追蹤的提單號</h4>
-<input type="text" id="uid"><br><br>
-<input type="button" value="查詢" onclick="showHint(uid.value)">
-<input type="button" value="清除資料" onclick="cleanAll()"><br><br>
+<input type="text" id="uid" /><br/><br/>
+<input type="button" value="查詢" onclick="showHint(uid.value);" />
+<input type="button" value="清除資料" onclick="cleanAll();" /><br/><br/>
 <span id="order_status"></span>
 
 <script>
-// ----- 顯示當前時間 -----
-function updateTime() {
-    const now = new Date();
-    document.getElementById("current_time").innerText = now.toLocaleString();
-}
-setInterval(updateTime, 1000);
-updateTime();
+var dateReviver = function (key, value) {
+    var a;
+    if (typeof value === 'string') {
+        a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+        if (a) {
+            return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6])).format("yyyy-MM-dd HH:mm:ss");
+        }
+    }
+    return value;
+};
 
-// ----- 設定試算表ID與工作表名稱 -----
-const SPREADSHEET_ID = "1giqADXQ93cHtIAiwZftKu-l7-3OGxqd9nBiRwiBs2A8"; // <-- 替換成你的試算表ID
-const SHEET_NAME = "提單"; // <-- 替換成你的工作表名稱
-
-// ----- 查詢函數 -----
-function showHint(uid) {
-    const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
-
-    fetch(url)
-    .then(res => res.text())
-    .then(data => {
-        // 去掉 Google JSONP 外層
-        const jsonData = JSON.parse(data.match(/google\.visualization\.Query\.setResponse\((.*)\)/s)[1]);
-        const rows = jsonData.table.rows;
-        const cols = jsonData.table.cols;
-
-        // 計算30天前日期
-        const today = new Date();
-        const past30Days = new Date(today);
-        past30Days.setDate(today.getDate() - 30);
-
-        // 篩選符合 uid 且日期在過去30天內
-        const filtered = rows.filter(r => {
-            const uidMatch = r.c[0] && r.c[0].v == uid; // 假設UID在第一欄
-            let dateMatch = true;
-            if (r.c[3] && r.c[3].v) { // 假設日期在第4欄 (D)
-                const rowDate = new Date(r.c[3].v);
-                dateMatch = rowDate >= past30Days && rowDate <= today;
-            }
-            return uidMatch && dateMatch;
-        });
-
-        // 顯示表格
+function showHint(str) {
+    var url = "https://script.google.com/macros/s/AKfycbx1-2fSmyfjm1cTPMwqUoYAiWzsbgcmF8LJR0N7AMWWpCros3al47-yRqIrO9WaJI26/exec"; // <-- 你的 Apps Script Web App URL
+    fetch(url + "?uid=" + encodeURIComponent(str))
+    .then(res => res.json())
+    .then(obj => {
         let html = '<table>';
-        // 表頭
         html += '<tr>';
-        cols.forEach(c => html += `<th>${c.label}</th>`);
+        obj[0].data.forEach(h => html += `<th>${h}</th>`);
         html += '</tr>';
 
-        if (filtered.length === 0) {
+        if(obj.length === 1) {
             html = "<h6>查無資料!<br>請聯絡客服<br>Tel:886-2-501-9887</h6>";
+            document.getElementById("uid").value = "";
         } else {
-            filtered.forEach(r => {
+            for (let i = 1; i < obj.length; i++) {
                 html += '<tr>';
-                r.c.forEach(cell => {
-                    html += `<td>${cell ? cell.v : ''}</td>`;
+                obj[i].data.forEach((d,j) => {
+                    if(j==2) html += `<td><font color=black>${d}</font></td>`; 
+                    else html += `<td>${d}</td>`;
                 });
                 html += '</tr>';
-            });
+            }
         }
-
+        html += '</table>';
         document.getElementById("order_status").innerHTML = html;
     })
     .catch(err => {
@@ -92,12 +91,10 @@ function showHint(uid) {
     });
 }
 
-// ----- 清除 -----
 function cleanAll() {
     document.getElementById("order_status").innerHTML = "";
     document.getElementById("uid").value = "";
 }
 </script>
-
 </body>
 </html>
