@@ -20,13 +20,13 @@ body {
     text-align: center;
 }
 .company-name {
-    font-size: 24px;
+    font-size: 36px; /* 公司名稱最大 */
     font-weight: bold;
     color: #1a73e8;
     margin-bottom: 5px;
 }
 h1 {
-    font-size: 28px;
+    font-size: 28px; /* 查詢標題次之 */
     margin: 5px 0 15px 0;
     color: #333;
 }
@@ -127,7 +127,7 @@ input[type="button"]:hover {
     <div class="company-name">信天翁國際快遞</div>
 
     <!-- 標題 -->
-    <h1>貨物追蹤查詢</h1>
+    <h1>貨物追蹤專業查詢</h1>
 
     <!-- 當前時間 -->
     <div class="time-container">
@@ -147,9 +147,15 @@ input[type="button"]:hover {
 </div>
 
 <script>
-// 當前時間
+// 日期格式化
 Date.prototype.format = function(fmt){
-    var o={"M+":this.getMonth()+1,"d+":this.getDate(),"H+":this.getHours(),"m+":this.getMinutes(),"s+":this.getSeconds()};
+    var o={
+        "M+":this.getMonth()+1,
+        "d+":this.getDate(),
+        "H+":this.getHours(),
+        "m+":this.getMinutes(),
+        "s+":this.getSeconds()
+    };
     if(/(y+)/.test(fmt)) fmt=fmt.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length));
     for(var k in o) if(new RegExp("("+k+")").test(fmt))
         fmt=fmt.replace(RegExp.$1, (RegExp.$1.length==1)?o[k]:("00"+o[k]).substr((""+o[k]).length));
@@ -158,7 +164,7 @@ Date.prototype.format = function(fmt){
 function showCurrentTime(){ document.getElementById('current_time').innerText=new Date().format("yyyy-MM-dd HH:mm:ss"); }
 setInterval(showCurrentTime,1000);
 
-// JSON 日期處理
+// JSON 日期修正
 var dateReviver=function(key,value){
     var a;
     if(typeof value==='string'){
@@ -198,6 +204,12 @@ function showHint(str){
                 let value=document.createElement("div");
                 value.className="card-value";
                 value.textContent=obj[i].data[j];
+
+                // 若是日期欄位，自動轉 yyyy-MM-dd HH:mm:ss
+                if(!isNaN(Date.parse(obj[i].data[j]))){
+                    value.textContent=new Date(obj[i].data[j]).format("yyyy-MM-dd HH:mm:ss");
+                }
+
                 if(j===2) value.style.color="black";
                 row.appendChild(label);
                 row.appendChild(value);
