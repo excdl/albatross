@@ -1,138 +1,207 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>貨物追蹤查詢</title>
+<title>貨物追蹤查詢 - 專業版</title>
 <style>
+/* ---------------- 基本排版 ---------------- */
 body {
-    font-family: 微軟正黑體;
-    font-size: 20px;
-    padding: 1%;
+    font-family: "微軟正黑體", Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
 }
-h6 {
-    color: red;
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+h4 {
+    color: #555;
+}
+
+/* ---------------- 輸入區 ---------------- */
+.search-box {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+input[type="text"] {
+    padding: 12px;
+    font-size: 18px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 6px 0 0 6px;
+    outline: none;
 }
 input[type="button"] {
-    padding: 10px 20px;
+    padding: 12px 20px;
     font-size: 18px;
+    border: none;
     background-color: #4CAF50;
     color: white;
-    border: none;
-    border-radius: 5px;
     cursor: pointer;
-    margin-right: 10px;
+    border-radius: 0 6px 6px 0;
 }
 input[type="button"]:hover {
     background-color: #45a049;
 }
-input[type="text"] {
-    padding: 10px;
-    font-size: 18px;
-    width: 300px;
+
+/* ---------------- 卡片式結果 ---------------- */
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 15px;
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
 }
-td {
-    border: 1px solid #ccc;
-    padding: 5px;
-    word-wrap: break-word;
-}
-td:first-child {
+.card-title {
     font-weight: bold;
-    width: 30%;
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+.card-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+.card-label {
+    color: #555;
+    font-weight: 600;
+}
+.card-value {
+    color: #000;
+}
+
+/* ---------------- 無資料提示 ---------------- */
+.no-data {
+    text-align: center;
+    color: red;
+    font-size: 18px;
+    margin-top: 30px;
+}
+
+/* ---------------- 當前時間 ---------------- */
+#current_time {
+    font-weight: bold;
+    color: #444;
 }
 </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>貨物追蹤專業查詢</h1>
+    <h4>當前時間: <span id="current_time"></span></h4>
+
+    <div class="search-box">
+        <input type="text" id="uid" placeholder="請輸入提單號">
+        <input type="button" value="查詢" onclick="showHint(uid.value);">
+        <input type="button" value="清除資料" onclick="cleanAll();">
+    </div>
+
+    <div id="order_status"></div>
+</div>
+
 <script>
-// 日期格式化
-Date.prototype.format = function(fmt) {
-    var o = {
-        "M+": this.getMonth() + 1,
-        "d+": this.getDate(),
-        "h+": this.getHours() % 12 == 0 ? 12 : this.getHours() % 12,
-        "H+": this.getHours(),
-        "m+": this.getMinutes(),
-        "s+": this.getSeconds(),
-        "q+": Math.floor((this.getMonth() + 3) / 3),
-        "S": this.getMilliseconds()
-    };
-    if (/(y+)/.test(fmt))
-        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (var k in o)
-        if (new RegExp("(" + k + ")").test(fmt))
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1)?(o[k]):(("00"+o[k]).substr((""+o[k]).length)));
+// ---------------- 當前時間 ----------------
+Date.prototype.format = function(fmt){
+    var o = {"M+":this.getMonth()+1,"d+":this.getDate(),"H+":this.getHours(),
+             "m+":this.getMinutes(),"s+":this.getSeconds()};
+    if(/(y+)/.test(fmt)) fmt=fmt.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length));
+    for(var k in o) if(new RegExp("("+k+")").test(fmt))
+        fmt=fmt.replace(RegExp.$1, (RegExp.$1.length==1)?o[k]:("00"+o[k]).substr((""+o[k]).length));
     return fmt;
 }
-
-// 顯示當前時間
-function showCurrentTime() {
-    var now = new Date();
-    document.getElementById('current_time').innerText = now.format("yyyy-MM-dd HH:mm:ss");
+function showCurrentTime(){
+    document.getElementById('current_time').innerText = new Date().format("yyyy-MM-dd HH:mm:ss");
 }
-setInterval(showCurrentTime, 1000);
+setInterval(showCurrentTime,1000);
 
-// JSON 日期轉換
-var dateReviver = function (key, value) {
+// ---------------- JSON 日期處理 ----------------
+var dateReviver = function(key,value){
     var a;
-    if (typeof value === 'string') {
-        a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
-        if (a) {
-            return new Date(Date.UTC(+a[1], +a[2]-1, +a[3], +a[4], +a[5], +a[6])).format("yyyy-MM-dd HH:mm:ss");
-        }
+    if(typeof value==='string'){
+        a=/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+        if(a) return new Date(Date.UTC(+a[1],+a[2]-1,+a[3],+a[4],+a[5],+a[6])).format("yyyy-MM-dd HH:mm:ss");
     }
     return value;
 };
 
-// 查詢
-function showHint(str) {
+// ---------------- 查詢函數 ----------------
+function showHint(str){
     if(!str) return;
-    var url = "https://script.google.com/macros/s/AKfycbx1-2fSmyfjm1cTPMwqUoYAiWzsbgcmF8LJR0N7AMWWpCros3al47-yRqIrO9WaJI26/exec";
-    fetch(url + "?uid=" + encodeURIComponent(str))
-    .then(res => res.json())
-    .then(obj => {
-        if(obj.length === 1){
-            document.getElementById("order_status").innerHTML = "<h6>查無資料!<br>請聯絡客服<br>Tel:886-2-501-9887</h6>";
-            document.getElementById("uid").value = "";
+    var url="https://script.google.com/macros/s/AKfycbx1-2fSmyfjm1cTPMwqUoYAiWzsbgcmF8LJR0N7AMWWpCros3al47-yRqIrO9WaJI26/exec";
+    fetch(url+"?uid="+encodeURIComponent(str))
+    .then(res=>res.json())
+    .then(obj=>{
+        const container = document.getElementById("order_status");
+        container.innerHTML = "";
+        if(obj.length===1){
+            container.innerHTML='<div class="no-data">查無資料!<br>請聯絡客服<br>Tel:886-2-501-9887</div>';
+            document.getElementById("uid").value="";
             return;
         }
-        let html = "";
-        for(let i=1; i<obj.length; i++){
-            html += '<table>';
-            for(let j=0; j<obj[0].data.length; j++){
-                html += '<tr>';
-                html += `<td>${obj[0].data[j]}</td>`;
-                if(j===2)
-                    html += `<td style="color:black;">${obj[i].data[j]}</td>`;
-                else
-                    html += `<td>${obj[i].data[j]}</td>`;
-                html += '</tr>';
+
+        // 生成卡片式結果
+        for(let i=1;i<obj.length;i++){
+            let card = document.createElement("div");
+            card.className="card";
+            
+            // 標題
+            let title = document.createElement("div");
+            title.className="card-title";
+            title.textContent = "查詢結果 #" + i;
+            card.appendChild(title);
+
+            // 每個欄位
+            for(let j=0;j<obj[0].data.length;j++){
+                let row = document.createElement("div");
+                row.className="card-row";
+
+                let label = document.createElement("div");
+                label.className="card-label";
+                label.textContent=obj[0].data[j];
+
+                let value = document.createElement("div");
+                value.className="card-value";
+                value.textContent=obj[i].data[j];
+
+                if(j===2) value.style.color="black"; // 第3欄特殊字色
+
+                row.appendChild(label);
+                row.appendChild(value);
+                card.appendChild(row);
             }
-            html += '</table>';
+
+            container.appendChild(card);
         }
-        document.getElementById("order_status").innerHTML = html;
     })
-    .catch(err => {
+    .catch(err=>{
         console.error(err);
-        document.getElementById("order_status").innerHTML = "<h6>資料讀取失敗，請稍後再試</h6>";
+        document.getElementById("order_status").innerHTML='<div class="no-data">資料讀取失敗，請稍後再試</div>';
     });
 }
 
-// 清除
+// ---------------- 清除 ----------------
 function cleanAll(){
-    document.getElementById("order_status").innerHTML = "";
-    document.getElementById("uid").value = "";
+    document.getElementById("order_status").innerHTML="";
+    document.getElementById("uid").value="";
 }
 </script>
-</head>
-<body>
-<h2>貨物追蹤查詢</h2>
-<h4>當前時間: <span id="current_time"></span></h4>
-<h4>輸入您追蹤的提單號</h4>
-<input type="text" id="uid" /><br/><br/>
-<input type="button" value="查詢" onclick="showHint(uid.value);" />
-<input type="button" value="清除資料" onclick="cleanAll();" /><br/><br/>
-<span id="order_status"></span>
+
 </body>
 </html>
