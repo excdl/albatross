@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>貨物追蹤查詢 - 專業版</title>
+<title>信天翁國際快遞貨物追蹤查詢</title>
 <style>
 /* ---------------- 基本排版 ---------------- */
 body {
@@ -18,9 +18,9 @@ body {
     background-color: #fff;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     border-radius: 8px;
+    text-align: center;
 }
 h1, h2 {
-    text-align: center;
     color: #333;
 }
 h4 {
@@ -32,13 +32,14 @@ h4 {
     display: flex;
     justify-content: center;
     margin: 20px 0;
+    gap: 10px; /* 按鈕間距 */
 }
 input[type="text"] {
     padding: 12px;
     font-size: 18px;
     width: 300px;
     border: 1px solid #ccc;
-    border-radius: 6px 0 0 6px;
+    border-radius: 6px;
     outline: none;
 }
 input[type="button"] {
@@ -48,7 +49,7 @@ input[type="button"] {
     background-color: #4CAF50;
     color: white;
     cursor: pointer;
-    border-radius: 0 6px 6px 0;
+    border-radius: 6px;
 }
 input[type="button"]:hover {
     background-color: #45a049;
@@ -62,6 +63,7 @@ input[type="button"]:hover {
     padding: 15px 20px;
     margin-bottom: 20px;
     transition: transform 0.2s, box-shadow 0.2s;
+    text-align: left;
 }
 .card:hover {
     transform: translateY(-2px);
@@ -94,10 +96,13 @@ input[type="button"]:hover {
     margin-top: 30px;
 }
 
-/* ---------------- 當前時間 ---------------- */
+/* ---------------- 當前時間置中 ---------------- */
 #current_time {
     font-weight: bold;
     color: #444;
+    display: block;
+    text-align: center;
+    margin-bottom: 20px;
 }
 </style>
 </head>
@@ -161,13 +166,11 @@ function showHint(str){
             let card = document.createElement("div");
             card.className="card";
             
-            // 標題
             let title = document.createElement("div");
             title.className="card-title";
             title.textContent = "查詢結果 #" + i;
             card.appendChild(title);
 
-            // 每個欄位
             for(let j=0;j<obj[0].data.length;j++){
                 let row = document.createElement("div");
                 row.className="card-row";
@@ -180,7 +183,7 @@ function showHint(str){
                 value.className="card-value";
                 value.textContent=obj[i].data[j];
 
-                if(j===2) value.style.color="black"; // 第3欄特殊字色
+                if(j===2) value.style.color="black";
 
                 row.appendChild(label);
                 row.appendChild(value);
