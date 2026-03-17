@@ -11,20 +11,18 @@ body {
     padding: 0;
 }
 
-/* LOGO 區塊 - 無底色，只加陰影，自動縮放 */
 .logo-section {
     width: 100%;
     text-align: center;
     padding: 40px 0;
 }
 .logo-section img {
-    width: 129.6vw; /* 原本 108vw * 1.2 */
+    width: 129.6vw;
     max-width: 1008px;
     height: auto;
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
-/* 容器 */
 .container {
     max-width: 900px;
     margin: 20px auto;
@@ -72,7 +70,7 @@ h1 {
 input[type="text"] { 
     padding: 12px; 
     font-size: 18px; 
-    width: 210px; /* 減少 30% */
+    width: 210px;
     border: 1px solid #ccc; 
     border-radius: 6px; 
     outline: none; 
@@ -97,40 +95,41 @@ input[type="button"]:hover {
     background-color: #fff; 
     border-radius: 8px; 
     box-shadow: 0 2px 8px rgba(0,0,0,0.15); 
-    padding: 20px 25px; 
-    margin-bottom: 25px; 
+    padding: 25px 30px; 
+    margin-bottom: 30px; 
     text-align: left; 
 }
 
 .card-title { 
     font-weight: bold; 
-    font-size: 22px; 
-    margin-bottom: 15px; 
+    font-size: 33px; 
+    margin-bottom: 22px; 
 }
 
 .card-row { 
     display: flex; 
     flex-wrap: wrap; 
     justify-content: space-between; 
-    margin-bottom: 12px; 
+    margin-bottom: 18px; 
     padding: 5px 10px;
     border-radius: 4px;
 }
+
 .card-row:nth-child(even) { 
-    background-color: #fafafa; 
+    background-color: #e0e0e0; /* 加深灰色 */
 }
 
 .card-label { 
     color: #555; 
     font-weight: 600; 
     flex: 1 1 40%; 
-    font-size: 18px; 
+    font-size: 27px; 
 }
 
 .card-value { 
     flex: 1 1 55%; 
     text-align: right; 
-    font-size: 18px; 
+    font-size: 27px; 
 }
 
 .status-received { color: green; font-weight: bold; }
@@ -141,19 +140,15 @@ input[type="button"]:hover {
 .no-data { 
     text-align: center; 
     color: red; 
-    font-size: 22px; 
-    margin-top: 30px; 
+    font-size: 33px; 
+    margin-top: 45px; 
 }
 
-/* 手機版自適應 */
 @media screen and (max-width: 600px) {
     .card-row { flex-direction: column; align-items: flex-start; }
-    .card-value { text-align: left; margin-top: 5px; }
+    .card-value { text-align: left; margin-top: 7px; }
     input[type="text"] { width: 100%; }
-    .logo-section img {
-        width: 80vw;  /* 手機版縮放 */
-        max-width: 320px;
-    }
+    .logo-section img { width: 80vw; max-width: 320px; }
 }
 </style>
 </head>
@@ -188,14 +183,14 @@ Date.prototype.format = function(fmt){
     return fmt;
 }
 
-// 顯示當前時間
+// 顯示時間
 function showCurrentTime(){
     document.getElementById('current_time').innerText=new Date().format("yyyy-MM-dd HH:mm:ss");
 }
 setInterval(showCurrentTime,1000);
 showCurrentTime();
 
-// 查詢函數
+// 查詢
 function showHint(str){
     if(!str) return;
     const btn=document.getElementById("btnSearch");
@@ -255,7 +250,7 @@ function cleanAll(){
     document.getElementById("uid").value="";
 }
 
-// 綁定按鈕事件
+// 綁定按鈕
 document.addEventListener("DOMContentLoaded", function(){
     const btnSearch=document.getElementById('btnSearch');
     const btnClear=document.getElementById('btnClear');
