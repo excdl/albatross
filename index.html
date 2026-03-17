@@ -14,7 +14,7 @@ body {
     width: 100%;
     text-align: center;
     padding: 40px 0;
-    background-color: #1a73e8; /* 深藍底 */
+    background-color: navy; /* LOGO 底色改成 navy */
 }
 .logo-section img {
     width: 90vw;
@@ -30,7 +30,7 @@ body {
     border-radius: 8px;
     text-align: center;
 }
-.company-name { font-size: 36px; font-weight: bold; color: #1a73e8; margin-bottom: 5px; }
+.company-name { font-size: 36px; font-weight: bold; color: navy; margin-bottom: 5px; } /* 公司名稱改成 navy */
 h1 { font-size: 28px; margin: 5px 0 15px 0; color: #333; }
 .time-container { display: flex; justify-content: center; align-items: center; gap: 4px; margin-bottom: 20px; }
 #current_time { font-weight: bold; color: #444; }
@@ -139,12 +139,12 @@ function showHint(str){
             }
             container.appendChild(card);
         }
-        btn.value="查詢"; // 載入完成恢復按鈕文字
+        btn.value="查詢";
     })
     .catch(err=>{
         console.error(err);
         document.getElementById("order_status").innerHTML='<div class="no-data">資料讀取失敗，請稍後再試</div>';
-        btn.value="查詢"; // 錯誤也恢復按鈕文字
+        btn.value="查詢";
     });
 }
 
