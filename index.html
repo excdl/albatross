@@ -17,8 +17,8 @@ body {
     padding: 40px 0;
 }
 .logo-section img {
-    width: 129.6vw;
-    max-width: 1008px;
+    width: 103.68vw; /* 129.6 * 0.8 = 103.68 */
+    max-width: 806.4px; /* 1008 * 0.8 = 806.4 */
     height: auto;
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
@@ -212,7 +212,7 @@ function showHint(str){
             card.className="card";
             let title=document.createElement("div");
             title.className="card-title";
-            title.textContent="查詢結果 #" + i;
+            title.textContent="查詢結果:";
             card.appendChild(title);
             for(let j=0;j<obj[0].data.length;j++){
                 let row=document.createElement("div");
