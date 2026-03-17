@@ -11,14 +11,15 @@ body {
 }
 .logo-section {
     width: 100%;
-    background-color: #1a73e8;
     text-align: center;
     padding: 50px 0;
-    opacity: 0;
-    transform: translateY(-30px);
-    animation: fadeInLogo 1.2s forwards;
+    background-color: transparent; /* 移除底色 */
 }
-.logo-section img { width: 75vw; max-width: 600px; height: auto; }
+.logo-section img { 
+    width: 90vw;  /* 放大 logo */
+    max-width: 700px; 
+    height: auto; 
+}
 .container {
     max-width: 900px;
     margin: 30px auto 40px auto;
@@ -27,12 +28,7 @@ body {
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInContainer 1s 0.8s forwards;
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
-.container:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.2); transform: translateY(-4px); }
 .company-name { font-size: 36px; font-weight: bold; color: #1a73e8; margin-bottom: 5px; }
 h1 { font-size: 28px; margin: 5px 0 20px 0; color: #333; }
 .time-container { font-size: 16px; color: #555; margin-bottom: 25px; }
@@ -53,8 +49,6 @@ input[type="button"] { padding: 12px 20px; font-size: 18px; border: none; border
 .status-delivering { color: #ff6600; font-weight: bold; }
 .status-signed { color: blue; font-weight: bold; }
 .no-data { text-align: center; color: red; font-size: 18px; margin-top: 30px; }
-@keyframes fadeInLogo { to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeInContainer { to { opacity: 1; transform: translateY(0); } }
 @media screen and (max-width:600px){
     input[type="text"] { width: 100%; }
     .card-row { flex-direction: column; align-items: flex-start; }
@@ -73,7 +67,7 @@ input[type="button"] { padding: 12px 20px; font-size: 18px; border: none; border
     <div class="company-name">信天翁國際快遞</div>
     <h1>貨物追蹤查詢</h1>
     <div class="time-container">
-        當前時間: <span id="current_time"></span>
+        當前時間: <span id="current_time">--:--:--</span>
     </div>
 
     <div class="search-box">
@@ -93,13 +87,19 @@ Date.prototype.format=function(fmt){
         fmt=fmt.replace(RegExp.$1, (RegExp.$1.length==1)?o[k]:("00"+o[k]).substr((""+o[k]).length));
     return fmt;
 }
-function showCurrentTime(){ document.getElementById('current_time').innerText=new Date().format("yyyy-MM-dd HH:mm:ss"); }
+
+// 立即更新一次時間
+function showCurrentTime(){
+    document.getElementById('current_time').innerText=new Date().format("yyyy-MM-dd HH:mm:ss");
+}
+// 每秒更新時間
 setInterval(showCurrentTime,1000);
+showCurrentTime(); // 立即顯示一次
 
 function showHint(str){
     if(!str) return;
     const btn=document.getElementById("btnSearch");
-    btn.value="查詢中…"; // 改按鈕文字
+    btn.value="查詢中…";
     var url="https://script.google.com/macros/s/AKfycbx1-2fSmyfjm1cTPMwqUoYAiWzsbgcmF8LJR0N7AMWWpCros3al47-yRqIrO9WaJI26/exec";
     fetch(url+"?uid="+encodeURIComponent(str))
     .then(res=>res.json())
@@ -140,12 +140,12 @@ function showHint(str){
             }
             container.appendChild(card);
         }
-        btn.value="查詢"; // 資料顯示完成後恢復
+        btn.value="查詢";
     })
     .catch(err=>{
         console.error(err);
         document.getElementById("order_status").innerHTML='<div class="no-data">資料讀取失敗，請稍後再試</div>';
-        btn.value="查詢"; // 發生錯誤也恢復按鈕
+        btn.value="查詢";
     });
 }
 
@@ -154,7 +154,6 @@ function cleanAll(){
     document.getElementById("uid").value="";
 }
 
-// 綁定事件
 document.addEventListener("DOMContentLoaded", function(){
     const btnSearch=document.getElementById('btnSearch');
     const btnClear=document.getElementById('btnClear');
@@ -164,12 +163,10 @@ document.addEventListener("DOMContentLoaded", function(){
         const uid=uidInput.value.trim();
         if(uid) showHint(uid);
     });
-
     btnClear.addEventListener('click', function(){ cleanAll(); });
 
-    // 按 Enter 觸發查詢
     uidInput.addEventListener('keydown', function(e){
-        if(e.key === "Enter"){
+        if(e.key==="Enter"){
             const uid=uidInput.value.trim();
             if(uid) showHint(uid);
         }
