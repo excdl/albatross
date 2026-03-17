@@ -19,8 +19,8 @@ body {
     background: linear-gradient(90deg, navy, #1a73e8); /* 漸層 */
 }
 .logo-section img {
-    width: 90vw;
-    max-width: 700px;
+    width: 108vw; /* 原 90vw * 1.2 = 108vw */
+    max-width: 840px; /* 原 700px * 1.2 = 840px */
     height: auto;
 }
 
@@ -143,7 +143,7 @@ input[type="button"]:hover {
     .card-row { flex-direction: column; align-items: flex-start; }
     .card-value { text-align: left; margin-top: 5px; }
     input[type="text"] { width: 100%; }
-    .logo-section img { width: 90vw; }
+    .logo-section img { width: 108vw; max-width: 840px; }
 }
 </style>
 </head>
@@ -154,7 +154,7 @@ input[type="button"]:hover {
 </div>
 
 <div class="container">
-    <div class="company-name">信天翁國際物流快遞</div>
+    <div class="company-name">信天翁國際快遞</div>
     <h1>貨物追蹤查詢</h1>
     <div class="time-container">
         當前時間: <span id="current_time"></span>
