@@ -10,17 +10,20 @@ body {
     margin: 0;
     padding: 0;
 }
+
+/* LOGO 區塊 - 漸層底色 */
 .logo-section {
     width: 100%;
     text-align: center;
     padding: 40px 0;
-    background-color: navy; /* LOGO 底色改成 navy */
+    background: linear-gradient(90deg, navy, #1a73e8); /* 漸層 */
 }
 .logo-section img {
     width: 90vw;
     max-width: 700px;
     height: auto;
 }
+
 .container {
     max-width: 900px;
     margin: 20px auto;
@@ -30,27 +33,115 @@ body {
     border-radius: 8px;
     text-align: center;
 }
-.company-name { font-size: 36px; font-weight: bold; color: navy; margin-bottom: 5px; } /* 公司名稱改成 navy */
-h1 { font-size: 28px; margin: 5px 0 15px 0; color: #333; }
-.time-container { display: flex; justify-content: center; align-items: center; gap: 4px; margin-bottom: 20px; }
-#current_time { font-weight: bold; color: #444; }
-.search-box { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
-input[type="text"] { padding: 12px; font-size: 18px; width: 300px; border: 1px solid #ccc; border-radius: 6px; outline: none; flex: 1 1 200px; }
-input[type="button"] { padding: 12px 20px; font-size: 18px; border: none; background-color: #4CAF50; color: white; cursor: pointer; border-radius: 6px; }
-input[type="button"]:hover { background-color: #45a049; }
-.card { background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); padding: 15px 20px; margin-bottom: 20px; text-align: left; }
-.card-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
-.card-row { display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 6px; }
-.card-label { color: #555; font-weight: 600; flex: 1 1 40%; }
-.card-value { flex: 1 1 55%; text-align: right; }
+
+.company-name { 
+    font-size: 36px; 
+    font-weight: bold; 
+    color: navy; 
+    margin-bottom: 5px; 
+}
+
+h1 { 
+    font-size: 24px; /* 標題縮小 */
+    margin: 5px 0 15px 0; 
+    color: #333; 
+}
+
+.time-container { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 4px; 
+    margin-bottom: 20px; 
+}
+
+#current_time { 
+    font-weight: bold; 
+    color: #444; 
+}
+
+.search-box { 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 10px; 
+    margin-bottom: 20px; 
+}
+
+input[type="text"] { 
+    padding: 12px; 
+    font-size: 18px; 
+    width: 300px; 
+    border: 1px solid #ccc; 
+    border-radius: 6px; 
+    outline: none; 
+    flex: 1 1 200px; 
+}
+
+input[type="button"] { 
+    padding: 12px 20px; 
+    font-size: 18px; 
+    border: none; 
+    background-color: #4CAF50; 
+    color: white; 
+    cursor: pointer; 
+    border-radius: 6px; 
+}
+
+input[type="button"]:hover { 
+    background-color: #45a049; 
+}
+
+.card { 
+    background-color: #fff; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15); 
+    padding: 20px 25px; 
+    margin-bottom: 25px; 
+    text-align: left; 
+}
+
+.card-title { 
+    font-weight: bold; 
+    font-size: 22px; /* 加大 50% */
+    margin-bottom: 15px; /* 間距加大 */
+}
+
+.card-row { 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    margin-bottom: 12px; /* 間距加大 */
+}
+
+.card-label { 
+    color: #555; 
+    font-weight: 600; 
+    flex: 1 1 40%; 
+    font-size: 18px; /* 加大 50% */
+}
+
+.card-value { 
+    flex: 1 1 55%; 
+    text-align: right; 
+    font-size: 18px; /* 加大 50% */
+}
+
 .status-received { color: green; font-weight: bold; }
 .status-exported { color: orange; font-weight: bold; }
 .status-delivering { color: #ff6600; font-weight: bold; }
 .status-signed { color: blue; font-weight: bold; }
-.no-data { text-align: center; color: red; font-size: 18px; margin-top: 30px; }
+
+.no-data { 
+    text-align: center; 
+    color: red; 
+    font-size: 22px; /* 加大 50% */
+    margin-top: 30px; 
+}
+
 @media screen and (max-width: 600px) {
     .card-row { flex-direction: column; align-items: flex-start; }
-    .card-value { text-align: left; margin-top: 3px; }
+    .card-value { text-align: left; margin-top: 5px; }
     input[type="text"] { width: 100%; }
     .logo-section img { width: 90vw; }
 }
@@ -63,7 +154,7 @@ input[type="button"]:hover { background-color: #45a049; }
 </div>
 
 <div class="container">
-    <div class="company-name">信天翁國際快遞</div>
+    <div class="company-name">信天翁國際物流快遞</div>
     <h1>貨物追蹤查詢</h1>
     <div class="time-container">
         當前時間: <span id="current_time"></span>
