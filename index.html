@@ -3,233 +3,257 @@
 <head>
 <meta charset="UTF-8">
 <title>貨物追蹤查詢 - 專業版</title>
+
 <style>
 body {
-    font-family: "微軟正黑體", Arial, sans-serif;
-    background-color: #f5f5f5;
+    font-family: "Segoe UI","微軟正黑體",sans-serif;
+    background: #eef2f6;
     margin: 0;
-    padding: 0;
 }
-.container {
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    text-align: center;
+
+/* 🔥 頂部企業標頭 */
+.header {
+    background: linear-gradient(90deg, #0f2a44, #1a73e8);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+.logo {
+    width: 50px;
 }
 .company-name {
-    font-size: 36px;
+    font-size: 24px;
     font-weight: bold;
-    color: #1a73e8;
-    margin-bottom: 5px;
 }
-h1 {
-    font-size: 28px;
-    margin: 5px 0 15px 0;
-    color: #333;
+
+/* 主容器 */
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
 }
-.time-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 4px; /* 間距縮小 */
+
+/* 查詢面板 */
+.search-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     margin-bottom: 20px;
+    text-align: center;
 }
-#current_time {
-    font-weight: bold;
-    color: #444;
+
+h1 {
+    margin-bottom: 15px;
 }
+
+/* 時間 */
+.time {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* 查詢區 */
 .search-box {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     gap: 10px;
-    margin-bottom: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
+
 input[type="text"] {
     padding: 12px;
-    font-size: 18px;
-    width: 300px;
+    font-size: 16px;
+    width: 280px;
+    border-radius: 6px;
     border: 1px solid #ccc;
-    border-radius: 6px;
-    outline: none;
-    flex: 1 1 200px;
 }
-input[type="button"] {
-    padding: 12px 20px;
-    font-size: 18px;
+
+/* 按鈕升級 */
+.btn {
+    padding: 12px 18px;
     border: none;
-    background-color: #4CAF50;
-    color: white;
-    cursor: pointer;
     border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
 }
-input[type="button"]:hover {
-    background-color: #45a049;
+
+.btn-search {
+    background: #1a73e8;
+    color: white;
 }
+.btn-search:hover {
+    background: #0f5bd3;
+}
+
+.btn-clear {
+    background: #ccc;
+}
+.btn-clear:hover {
+    background: #aaa;
+}
+
+/* 🔥 結果卡片（時間軸風格） */
+.timeline {
+    border-left: 4px solid #1a73e8;
+    margin-top: 20px;
+    padding-left: 20px;
+}
+
 .card {
-    background-color: #fff;
+    background: white;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    padding: 15px 20px;
-    margin-bottom: 20px;
-    text-align: left;
+    padding: 15px;
+    margin-bottom: 15px;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
+
+.card::before {
+    content: "";
+    position: absolute;
+    left: -12px;
+    top: 20px;
+    width: 12px;
+    height: 12px;
+    background: #1a73e8;
+    border-radius: 50%;
+}
+
 .card-title {
     font-weight: bold;
-    font-size: 18px;
     margin-bottom: 10px;
 }
+
 .card-row {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
     margin-bottom: 6px;
 }
+
 .card-label {
-    color: #555;
-    font-weight: 600;
-    flex: 1 1 40%;
+    color: #666;
 }
 .card-value {
-    flex: 1 1 55%;
-    text-align: right;
+    font-weight: 500;
 }
-.status-received { color: green; font-weight: bold; }
-.status-exported { color: orange; font-weight: bold; }
-.status-delivering { color: #ff6600; font-weight: bold; }
-.status-signed { color: blue; font-weight: bold; }
+
+/* 狀態顏色 */
+.status-received { color: green; }
+.status-exported { color: orange; }
+.status-delivering { color: #ff6600; }
+.status-signed { color: blue; }
+
 .no-data {
     text-align: center;
     color: red;
-    font-size: 18px;
-    margin-top: 30px;
+    margin-top: 20px;
 }
-@media screen and (max-width: 600px) {
+
+/* 手機 */
+@media(max-width:600px){
     .card-row {
         flex-direction: column;
         align-items: flex-start;
     }
-    .card-value {
-        text-align: left;
-        margin-top: 3px;
-    }
-    input[type="text"] {
-        width: 100%;
-    }
 }
 </style>
 </head>
+
 <body>
+
+<!-- 🔥 頂部 -->
+<div class="header">
+    <img src="logo.png" class="logo">
+    <div class="company-name">信天翁國際快遞</div>
+</div>
 
 <div class="container">
 
-    <!-- 公司名稱 -->
-    <div class="company-name">信天翁國際快遞</div>
-
-    <!-- 標題 -->
-    <h1>貨物追蹤查詢</h1>
-
-    <!-- 當前時間 -->
-    <div class="time-container">
-        <span>當前時間:</span>
-        <span id="current_time"></span>
-    </div>
-
     <!-- 查詢區 -->
-    <div class="search-box">
-        <input type="text" id="uid" placeholder="請輸入提單號">
-        <input type="button" value="查詢" onclick="showHint(uid.value);">
-        <input type="button" value="清除資料" onclick="cleanAll();">
+    <div class="search-panel">
+        <h1>貨物追蹤查詢</h1>
+
+        <div class="time">
+            當前時間：<span id="current_time"></span>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="uid" placeholder="請輸入提單號">
+            <button class="btn btn-search" onclick="showHint(uid.value)">查詢</button>
+            <button class="btn btn-clear" onclick="cleanAll()">清除</button>
+        </div>
     </div>
 
-    <!-- 查詢結果 -->
-    <div id="order_status"></div>
+    <!-- 結果 -->
+    <div id="order_status" class="timeline"></div>
+
 </div>
 
 <script>
-// 日期格式化
-Date.prototype.format = function(fmt){
-    var o={
-        "M+":this.getMonth()+1,
-        "d+":this.getDate(),
-        "H+":this.getHours(),
-        "m+":this.getMinutes(),
-        "s+":this.getSeconds()
-    };
-    if(/(y+)/.test(fmt)) fmt=fmt.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length));
-    for(var k in o) if(new RegExp("("+k+")").test(fmt))
-        fmt=fmt.replace(RegExp.$1, (RegExp.$1.length==1)?o[k]:("00"+o[k]).substr((""+o[k]).length));
-    return fmt;
+// 時間
+function updateTime(){
+    document.getElementById("current_time").innerText =
+        new Date().toLocaleString();
 }
-function showCurrentTime(){ document.getElementById('current_time').innerText=new Date().format("yyyy-MM-dd HH:mm:ss"); }
-setInterval(showCurrentTime,1000);
+setInterval(updateTime,1000);
 
-// JSON 日期修正
-var dateReviver=function(key,value){
-    var a;
-    if(typeof value==='string'){
-        a=/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
-        if(a) return new Date(Date.UTC(+a[1],+a[2]-1,+a[3],+a[4],+a[5],+a[6])).format("yyyy-MM-dd HH:mm:ss");
-    }
-    return value;
-};
-
-// 查詢函數
+// 查詢
 function showHint(str){
     if(!str) return;
+
     var url="https://script.google.com/macros/s/AKfycbx1-2fSmyfjm1cTPMwqUoYAiWzsbgcmF8LJR0N7AMWWpCros3al47-yRqIrO9WaJI26/exec";
+
     fetch(url+"?uid="+encodeURIComponent(str))
     .then(res=>res.json())
     .then(obj=>{
         const container=document.getElementById("order_status");
         container.innerHTML="";
+
         if(obj.length===1){
-            container.innerHTML='<div class="no-data">查無資料!<br>請聯絡客服<br>Tel:886-2-501-9887</div>';
-            document.getElementById("uid").value="";
+            container.innerHTML='<div class="no-data">查無資料</div>';
             return;
         }
+
         for(let i=1;i<obj.length;i++){
             let card=document.createElement("div");
             card.className="card";
+
             let title=document.createElement("div");
             title.className="card-title";
-            title.textContent="查詢結果 #" + i;
+            title.textContent="物流紀錄 #" + i;
             card.appendChild(title);
+
             for(let j=0;j<obj[0].data.length;j++){
                 let row=document.createElement("div");
                 row.className="card-row";
+
                 let label=document.createElement("div");
                 label.className="card-label";
                 label.textContent=obj[0].data[j];
+
                 let value=document.createElement("div");
                 value.className="card-value";
                 let cellValue=obj[i].data[j];
 
-                // 自動日期格式
-                if(!isNaN(Date.parse(cellValue))){
-                    cellValue=new Date(cellValue).format("yyyy-MM-dd HH:mm:ss");
-                }
-
-                // 狀態顏色判斷
                 if(cellValue.includes("已收貨")) value.className+=" status-received";
                 else if(cellValue.includes("已出口")) value.className+=" status-exported";
                 else if(cellValue.includes("派件中")) value.className+=" status-delivering";
                 else if(cellValue.includes("簽收")) value.className+=" status-signed";
 
                 value.textContent=cellValue;
+
                 row.appendChild(label);
                 row.appendChild(value);
                 card.appendChild(row);
             }
+
             container.appendChild(card);
         }
-    })
-    .catch(err=>{
-        console.error(err);
-        document.getElementById("order_status").innerHTML='<div class="no-data">資料讀取失敗，請稍後再試</div>';
     });
 }
 
