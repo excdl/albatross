@@ -11,19 +11,20 @@ body {
     padding: 0;
 }
 
-/* LOGO 區塊 - 漸層底色 */
+/* LOGO 區塊 - 無底色，只加陰影，自動縮放 */
 .logo-section {
     width: 100%;
     text-align: center;
     padding: 40px 0;
-    background: linear-gradient(90deg, navy, #1a73e8); /* 漸層 */
 }
 .logo-section img {
-    width: 108vw; /* 原 90vw * 1.2 = 108vw */
-    max-width: 840px; /* 原 700px * 1.2 = 840px */
+    width: 129.6vw; /* 原本 108vw * 1.2 */
+    max-width: 1008px;
     height: auto;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
+/* 容器 */
 .container {
     max-width: 900px;
     margin: 20px auto;
@@ -42,7 +43,7 @@ body {
 }
 
 h1 { 
-    font-size: 24px; /* 標題縮小 */
+    font-size: 24px; 
     margin: 5px 0 15px 0; 
     color: #333; 
 }
@@ -71,7 +72,7 @@ h1 {
 input[type="text"] { 
     padding: 12px; 
     font-size: 18px; 
-    width: 300px; 
+    width: 210px; /* 減少 30% */
     border: 1px solid #ccc; 
     border-radius: 6px; 
     outline: none; 
@@ -103,28 +104,33 @@ input[type="button"]:hover {
 
 .card-title { 
     font-weight: bold; 
-    font-size: 22px; /* 加大 50% */
-    margin-bottom: 15px; /* 間距加大 */
+    font-size: 22px; 
+    margin-bottom: 15px; 
 }
 
 .card-row { 
     display: flex; 
     flex-wrap: wrap; 
     justify-content: space-between; 
-    margin-bottom: 12px; /* 間距加大 */
+    margin-bottom: 12px; 
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+.card-row:nth-child(even) { 
+    background-color: #fafafa; 
 }
 
 .card-label { 
     color: #555; 
     font-weight: 600; 
     flex: 1 1 40%; 
-    font-size: 18px; /* 加大 50% */
+    font-size: 18px; 
 }
 
 .card-value { 
     flex: 1 1 55%; 
     text-align: right; 
-    font-size: 18px; /* 加大 50% */
+    font-size: 18px; 
 }
 
 .status-received { color: green; font-weight: bold; }
@@ -135,15 +141,19 @@ input[type="button"]:hover {
 .no-data { 
     text-align: center; 
     color: red; 
-    font-size: 22px; /* 加大 50% */
+    font-size: 22px; 
     margin-top: 30px; 
 }
 
+/* 手機版自適應 */
 @media screen and (max-width: 600px) {
     .card-row { flex-direction: column; align-items: flex-start; }
     .card-value { text-align: left; margin-top: 5px; }
     input[type="text"] { width: 100%; }
-    .logo-section img { width: 108vw; max-width: 840px; }
+    .logo-section img {
+        width: 80vw;  /* 手機版縮放 */
+        max-width: 320px;
+    }
 }
 </style>
 </head>
