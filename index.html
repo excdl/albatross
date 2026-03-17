@@ -11,76 +11,78 @@ body {
     margin: 0;
 }
 
-/* 🔥 頂部（大LOGO版） */
+/* 🔥 超大 LOGO 版頂部 */
 .header {
     background: linear-gradient(90deg, #0f2a44, #1a73e8);
     color: white;
-    padding: 40px 20px;
+    padding: 80px 20px 40px 20px; /* 上方留白更多 */
     text-align: center;
 }
 
 .logo-large {
-    width: 220px;   /* 調整寬度到官網級別 */
+    width: 350px; /* 超大 LOGO，像官網比例 */
     height: auto;
-    margin-bottom: 15px;
-    filter: drop-shadow(0 6px 15px rgba(0,0,0,0.4));
+    margin-bottom: 20px;
+    filter: drop-shadow(0 8px 25px rgba(0,0,0,0.5));
 }
 
 .company-name {
-    font-size: 28px;
+    font-size: 36px;
     font-weight: bold;
     letter-spacing: 2px;
 }
 
 /* 主容器 */
 .container {
-    max-width: 900px;
-    margin: 30px auto;
+    max-width: 1000px;
+    margin: 40px auto;
     padding: 20px;
 }
 
 /* 查詢面板 */
 .search-panel {
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    margin-bottom: 30px;
     text-align: center;
 }
 
 h1 {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333;
 }
 
 .time {
-    color: #666;
-    margin-bottom: 15px;
+    color: #555;
+    margin-bottom: 20px;
+    font-size: 16px;
 }
 
 /* 查詢區 */
 .search-box {
     display: flex;
-    gap: 10px;
+    gap: 15px;
     justify-content: center;
     flex-wrap: wrap;
 }
 
 input[type="text"] {
-    padding: 12px;
-    font-size: 16px;
-    width: 280px;
-    border-radius: 6px;
+    padding: 14px;
+    font-size: 18px;
+    width: 350px;
+    border-radius: 8px;
     border: 1px solid #ccc;
 }
 
-/* 按鈕 */
 .btn {
-    padding: 12px 18px;
+    padding: 14px 22px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
 }
 
@@ -99,49 +101,52 @@ input[type="text"] {
     background: #aaa;
 }
 
-/* 🔥 時間軸 */
+/* 時間軸 */
 .timeline {
-    border-left: 4px solid #1a73e8;
-    margin-top: 20px;
-    padding-left: 20px;
+    border-left: 5px solid #1a73e8;
+    margin-top: 25px;
+    padding-left: 25px;
 }
 
 .card {
     background: white;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
     position: relative;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .card::before {
     content: "";
     position: absolute;
-    left: -12px;
-    top: 20px;
-    width: 12px;
-    height: 12px;
+    left: -17px;
+    top: 25px;
+    width: 15px;
+    height: 15px;
     background: #1a73e8;
     border-radius: 50%;
 }
 
 .card-title {
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    font-size: 18px;
 }
 
 .card-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .card-label {
     color: #666;
+    font-size: 16px;
 }
 .card-value {
     font-weight: 500;
+    font-size: 16px;
 }
 
 /* 狀態顏色 */
@@ -153,11 +158,18 @@ input[type="text"] {
 .no-data {
     text-align: center;
     color: red;
-    margin-top: 20px;
+    margin-top: 25px;
+    font-size: 18px;
 }
 
-/* 手機 */
+/* 手機響應 */
 @media(max-width:600px){
+    .logo-large {
+        width: 180px;  /* 手機縮小 */
+    }
+    input[type="text"] {
+        width: 100%;
+    }
     .card-row {
         flex-direction: column;
         align-items: flex-start;
@@ -168,7 +180,7 @@ input[type="text"] {
 
 <body>
 
-<!-- 🔥 大LOGO置中 -->
+<!-- 🔥 超大 LOGO 官網比例 -->
 <div class="header">
     <img src="logo.png" class="logo-large">
     <div class="company-name">信天翁國際快遞</div>
