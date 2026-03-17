@@ -9,8 +9,6 @@ body {
     background-color: #eef2f6;
     margin: 0;
 }
-
-/* LOGO 區塊 */
 .logo-section {
     width: 100%;
     background-color: #1a73e8;
@@ -20,13 +18,7 @@ body {
     transform: translateY(-30px);
     animation: fadeInLogo 1.2s forwards;
 }
-.logo-section img {
-    width: 75vw;
-    max-width: 600px;
-    height: auto;
-}
-
-/* 主容器區塊 */
+.logo-section img { width: 75vw; max-width: 600px; height: auto; }
 .container {
     max-width: 900px;
     margin: 30px auto 40px auto;
@@ -40,69 +32,18 @@ body {
     animation: fadeInContainer 1s 0.8s forwards;
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
-.container:hover {
-    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-    transform: translateY(-4px);
-}
-
-/* 公司名稱與標題 */
-.company-name {
-    font-size: 36px;
-    font-weight: bold;
-    color: #1a73e8;
-    margin-bottom: 5px;
-}
-h1 {
-    font-size: 28px;
-    margin: 5px 0 20px 0;
-    color: #333;
-}
-
-/* 當前時間 */
-.time-container {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 25px;
-}
-
-/* 查詢框 */
-.search-box {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-input[type="text"] {
-    padding: 12px;
-    font-size: 18px;
-    width: 300px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    outline: none;
-    flex: 1 1 200px;
-}
-input[type="button"] {
-    padding: 12px 20px;
-    font-size: 18px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
+.container:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.2); transform: translateY(-4px); }
+.company-name { font-size: 36px; font-weight: bold; color: #1a73e8; margin-bottom: 5px; }
+h1 { font-size: 28px; margin: 5px 0 20px 0; color: #333; }
+.time-container { font-size: 16px; color: #555; margin-bottom: 25px; }
+.search-box { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
+input[type="text"] { padding: 12px; font-size: 18px; width: 300px; border: 1px solid #ccc; border-radius: 6px; outline: none; flex: 1 1 200px; }
+input[type="button"] { padding: 12px 20px; font-size: 18px; border: none; border-radius: 6px; cursor: pointer; }
 #btnSearch { background-color: #1a73e8; color: white; }
 #btnSearch:hover { background-color: #0f5bd3; }
 #btnClear { background-color: #ccc; }
 #btnClear:hover { background-color: #aaa; }
-
-/* 查詢結果卡片 */
-.card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    padding: 15px 20px;
-    margin-bottom: 20px;
-    text-align: left;
-}
+.card { background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); padding: 15px 20px; margin-bottom: 20px; text-align: left; }
 .card-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
 .card-row { display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 6px; }
 .card-label { color: #555; font-weight: 600; flex: 1 1 40%; }
@@ -112,16 +53,8 @@ input[type="button"] {
 .status-delivering { color: #ff6600; font-weight: bold; }
 .status-signed { color: blue; font-weight: bold; }
 .no-data { text-align: center; color: red; font-size: 18px; margin-top: 30px; }
-
-/* LOGO / Container 淡入動畫 */
-@keyframes fadeInLogo {
-    to { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeInContainer {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* 手機自適應淡入縮放 */
+@keyframes fadeInLogo { to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInContainer { to { opacity: 1; transform: translateY(0); } }
 @media screen and (max-width:600px){
     input[type="text"] { width: 100%; }
     .card-row { flex-direction: column; align-items: flex-start; }
@@ -132,12 +65,10 @@ input[type="button"] {
 </head>
 <body>
 
-<!-- LOGO 區塊 -->
 <div class="logo-section">
     <img src="logo.png" alt="公司 LOGO">
 </div>
 
-<!-- 主容器 -->
 <div class="container">
     <div class="company-name">信天翁國際快遞</div>
     <h1>貨物追蹤查詢</h1>
@@ -155,8 +86,7 @@ input[type="button"] {
 </div>
 
 <script>
-// 時間格式化
-Date.prototype.format = function(fmt){
+Date.prototype.format=function(fmt){
     var o={M+:this.getMonth()+1,d+:this.getDate(),H+:this.getHours(),m+:this.getMinutes(),s+:this.getSeconds()};
     if(/(y+)/.test(fmt)) fmt=fmt.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length));
     for(var k in o) if(new RegExp("("+k+")").test(fmt))
@@ -166,9 +96,10 @@ Date.prototype.format = function(fmt){
 function showCurrentTime(){ document.getElementById('current_time').innerText=new Date().format("yyyy-MM-dd HH:mm:ss"); }
 setInterval(showCurrentTime,1000);
 
-// 查詢函數
 function showHint(str){
     if(!str) return;
+    const btn=document.getElementById("btnSearch");
+    btn.value="查詢中…"; // 改按鈕文字
     var url="https://script.google.com/macros/s/AKfycbx1-2fSmyfjm1cTPMwqUoYAiWzsbgcmF8LJR0N7AMWWpCros3al47-yRqIrO9WaJI26/exec";
     fetch(url+"?uid="+encodeURIComponent(str))
     .then(res=>res.json())
@@ -178,6 +109,7 @@ function showHint(str){
         if(obj.length===1){
             container.innerHTML='<div class="no-data">查無資料!<br>請聯絡客服<br>Tel:886-2-501-9887</div>';
             document.getElementById("uid").value="";
+            btn.value="查詢";
             return;
         }
         for(let i=1;i<obj.length;i++){
@@ -208,26 +140,40 @@ function showHint(str){
             }
             container.appendChild(card);
         }
+        btn.value="查詢"; // 資料顯示完成後恢復
     })
     .catch(err=>{
         console.error(err);
         document.getElementById("order_status").innerHTML='<div class="no-data">資料讀取失敗，請稍後再試</div>';
+        btn.value="查詢"; // 發生錯誤也恢復按鈕
     });
 }
 
-// 清除功能
 function cleanAll(){
     document.getElementById("order_status").innerHTML="";
     document.getElementById("uid").value="";
 }
 
-// 綁定按鈕事件（保證按鈕完全可用）
-document.getElementById('btnSearch').addEventListener('click', function(){
-    const uid = document.getElementById('uid').value.trim();
-    if(uid) showHint(uid);
-});
-document.getElementById('btnClear').addEventListener('click', function(){
-    cleanAll();
+// 綁定事件
+document.addEventListener("DOMContentLoaded", function(){
+    const btnSearch=document.getElementById('btnSearch');
+    const btnClear=document.getElementById('btnClear');
+    const uidInput=document.getElementById('uid');
+
+    btnSearch.addEventListener('click', function(){
+        const uid=uidInput.value.trim();
+        if(uid) showHint(uid);
+    });
+
+    btnClear.addEventListener('click', function(){ cleanAll(); });
+
+    // 按 Enter 觸發查詢
+    uidInput.addEventListener('keydown', function(e){
+        if(e.key === "Enter"){
+            const uid=uidInput.value.trim();
+            if(uid) showHint(uid);
+        }
+    });
 });
 </script>
 
