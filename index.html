@@ -11,22 +11,25 @@ body {
     margin: 0;
 }
 
-/* 🔥 頂部企業標頭 */
+/* 🔥 頂部（大LOGO版） */
 .header {
     background: linear-gradient(90deg, #0f2a44, #1a73e8);
     color: white;
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
+    padding: 30px 20px;
+    text-align: center;
 }
-.logo {
-    width: 50px;
+
+.logo-large {
+    width: 150px;
+    height: auto;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
 }
+
 .company-name {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: bold;
+    letter-spacing: 2px;
 }
 
 /* 主容器 */
@@ -50,7 +53,6 @@ h1 {
     margin-bottom: 15px;
 }
 
-/* 時間 */
 .time {
     color: #666;
     margin-bottom: 15px;
@@ -72,7 +74,7 @@ input[type="text"] {
     border: 1px solid #ccc;
 }
 
-/* 按鈕升級 */
+/* 按鈕 */
 .btn {
     padding: 12px 18px;
     border: none;
@@ -97,7 +99,7 @@ input[type="text"] {
     background: #aaa;
 }
 
-/* 🔥 結果卡片（時間軸風格） */
+/* 🔥 時間軸 */
 .timeline {
     border-left: 4px solid #1a73e8;
     margin-top: 20px;
@@ -166,9 +168,9 @@ input[type="text"] {
 
 <body>
 
-<!-- 🔥 頂部 -->
+<!-- 🔥 大LOGO在上 -->
 <div class="header">
-    <img src="logo.png" class="logo">
+    <img src="logo.png" class="logo-large">
     <div class="company-name">信天翁國際快遞</div>
 </div>
 
@@ -189,13 +191,13 @@ input[type="text"] {
         </div>
     </div>
 
-    <!-- 結果 -->
+    <!-- 查詢結果 -->
     <div id="order_status" class="timeline"></div>
 
 </div>
 
 <script>
-// 時間
+// 時間顯示
 function updateTime(){
     document.getElementById("current_time").innerText =
         new Date().toLocaleString();
@@ -254,6 +256,10 @@ function showHint(str){
 
             container.appendChild(card);
         }
+    })
+    .catch(()=>{
+        document.getElementById("order_status").innerHTML =
+            '<div class="no-data">資料讀取失敗</div>';
     });
 }
 
