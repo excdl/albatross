@@ -3,212 +3,166 @@
 <head>
 <meta charset="UTF-8">
 <title>貨物追蹤查詢 - 專業版</title>
-
 <style>
 body {
-    font-family: "Segoe UI","微軟正黑體",sans-serif;
-    background: #eef2f6;
+    font-family: "微軟正黑體", Arial, sans-serif;
+    background-color: #eef2f6;
     margin: 0;
 }
 
-/* 頂部超大 LOGO */
-.header {
-    background: linear-gradient(90deg, #0f2a44, #1a73e8);
-    color: white;
-    padding: 80px 20px 40px 20px;
+/* LOGO 區塊 */
+.logo-section {
+    width: 100%;
+    background-color: #1a73e8;
     text-align: center;
+    padding: 50px 0;
+    opacity: 0;
+    animation: fadeIn 1.5s forwards;
 }
-
-.logo-large {
-    width: 350px;
+.logo-section img {
+    width: 75vw;
+    max-width: 600px;
     height: auto;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 8px 25px rgba(0,0,0,0.5));
 }
 
+/* 主容器區塊 */
+.container {
+    max-width: 900px;
+    margin: -50px auto 40px auto;
+    padding: 30px 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.container:hover {
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    transform: translateY(-4px);
+}
+
+/* 公司名稱與標題 */
 .company-name {
     font-size: 36px;
     font-weight: bold;
-    letter-spacing: 2px;
+    color: #1a73e8;
+    margin-bottom: 5px;
 }
-
-/* 主容器 */
-.container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 20px;
-}
-
-/* 查詢面板 */
-.search-panel {
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    margin-bottom: 30px;
-    text-align: center;
-}
-
 h1 {
-    margin-bottom: 20px;
     font-size: 28px;
+    margin: 5px 0 20px 0;
     color: #333;
 }
 
-.time {
-    color: #555;
-    margin-bottom: 20px;
+/* 當前時間 */
+.time-container {
     font-size: 16px;
+    color: #555;
+    margin-bottom: 25px;
 }
 
-/* 查詢區 */
+/* 查詢框 */
 .search-box {
     display: flex;
-    gap: 15px;
-    justify-content: center;
     flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
 }
-
 input[type="text"] {
-    padding: 14px;
+    padding: 12px;
     font-size: 18px;
-    width: 350px;
-    border-radius: 8px;
+    width: 300px;
     border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    flex: 1 1 200px;
 }
-
-.btn {
-    padding: 14px 22px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+input[type="button"] {
+    padding: 12px 20px;
     font-size: 18px;
-    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
-
-.btn-search {
-    background: #1a73e8;
+#btnSearch {
+    background-color: #1a73e8;
     color: white;
 }
-.btn-search:hover {
-    background: #0f5bd3;
+#btnSearch:hover { background-color: #0f5bd3; }
+#btnClear {
+    background-color: #ccc;
 }
+#btnClear:hover { background-color: #aaa; }
 
-.btn-clear {
-    background: #ccc;
-}
-.btn-clear:hover {
-    background: #aaa;
-}
-
-/* 時間軸 */
-.timeline {
-    border-left: 5px solid #1a73e8;
-    margin-top: 25px;
-    padding-left: 25px;
-}
-
+/* 查詢結果卡片 */
 .card {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 15px 20px;
     margin-bottom: 20px;
-    position: relative;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: left;
 }
-
-.card::before {
-    content: "";
-    position: absolute;
-    left: -17px;
-    top: 25px;
-    width: 15px;
-    height: 15px;
-    background: #1a73e8;
-    border-radius: 50%;
-}
-
 .card-title {
     font-weight: bold;
-    margin-bottom: 12px;
     font-size: 18px;
+    margin-bottom: 10px;
 }
-
 .card-row {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+}
+.card-label { color: #555; font-weight: 600; flex: 1 1 40%; }
+.card-value { flex: 1 1 55%; text-align: right; }
+.status-received { color: green; font-weight: bold; }
+.status-exported { color: orange; font-weight: bold; }
+.status-delivering { color: #ff6600; font-weight: bold; }
+.status-signed { color: blue; font-weight: bold; }
+.no-data { text-align: center; color: red; font-size: 18px; margin-top: 30px; }
+
+/* LOGO 淡入動畫 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.card-label {
-    color: #666;
-    font-size: 16px;
-}
-.card-value {
-    font-weight: 500;
-    font-size: 16px;
-}
-
-/* 狀態顏色 */
-.status-received { color: green; }
-.status-exported { color: orange; }
-.status-delivering { color: #ff6600; }
-.status-signed { color: blue; }
-
-.no-data {
-    text-align: center;
-    color: red;
-    margin-top: 25px;
-    font-size: 18px;
-}
-
-/* 手機響應 */
-@media(max-width:600px){
-    .logo-large {
-        width: 180px;
-    }
-    input[type="text"] {
-        width: 100%;
-    }
-    .card-row {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+@media screen and (max-width:600px){
+    input[type="text"] { width: 100%; }
+    .card-row { flex-direction: column; align-items: flex-start; }
+    .card-value { text-align: left; margin-top: 3px; }
+    .logo-section img { width: 90vw; }
 }
 </style>
 </head>
-
 <body>
 
-<div class="header">
-    <img src="logo.png" class="logo-large">
-    <div class="company-name">信天翁國際快遞</div>
+<!-- LOGO 區塊 -->
+<div class="logo-section">
+    <img src="logo.png" alt="公司 LOGO">
 </div>
 
+<!-- 主容器 -->
 <div class="container">
-
-    <!-- 查詢區 -->
-    <div class="search-panel">
-        <h1>貨物追蹤查詢</h1>
-
-        <div class="time">
-            當前時間：<span id="current_time"></span>
-        </div>
-
-        <div class="search-box">
-            <input type="text" id="uid" placeholder="請輸入提單號">
-            <input type="button" value="查詢" onclick="showHint(document.getElementById('uid').value);">
-            <input type="button" value="清除資料" onclick="cleanAll();">
-        </div>
+    <div class="company-name">信天翁國際快遞</div>
+    <h1>貨物追蹤查詢</h1>
+    <div class="time-container">
+        當前時間: <span id="current_time"></span>
     </div>
 
-    <!-- 查詢結果 -->
-    <div id="order_status" class="timeline"></div>
+    <div class="search-box">
+        <input type="text" id="uid" placeholder="請輸入提單號">
+        <input type="button" id="btnSearch" value="查詢">
+        <input type="button" id="btnClear" value="清除資料">
+    </div>
 
+    <div id="order_status"></div>
 </div>
 
 <script>
-// 時間顯示
+// 時間格式化
 Date.prototype.format = function(fmt){
     var o={M+:this.getMonth()+1,d+:this.getDate(),H+:this.getHours(),m+:this.getMinutes(),s+:this.getSeconds()};
     if(/(y+)/.test(fmt)) fmt=fmt.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length));
@@ -216,7 +170,6 @@ Date.prototype.format = function(fmt){
         fmt=fmt.replace(RegExp.$1, (RegExp.$1.length==1)?o[k]:("00"+o[k]).substr((""+o[k]).length));
     return fmt;
 }
-
 function showCurrentTime(){ document.getElementById('current_time').innerText=new Date().format("yyyy-MM-dd HH:mm:ss"); }
 setInterval(showCurrentTime,1000);
 
@@ -269,11 +222,20 @@ function showHint(str){
     });
 }
 
-// 清除
+// 清除功能
 function cleanAll(){
     document.getElementById("order_status").innerHTML="";
     document.getElementById("uid").value="";
 }
+
+// 綁定按鈕事件
+document.getElementById('btnSearch').addEventListener('click', function(){
+    const uid = document.getElementById('uid').value.trim();
+    if(uid) showHint(uid);
+});
+document.getElementById('btnClear').addEventListener('click', function(){
+    cleanAll();
+});
 </script>
 
 </body>
