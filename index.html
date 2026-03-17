@@ -17,7 +17,8 @@ body {
     text-align: center;
     padding: 50px 0;
     opacity: 0;
-    animation: fadeIn 1.5s forwards;
+    transform: translateY(-30px);
+    animation: fadeInLogo 1.2s forwards;
 }
 .logo-section img {
     width: 75vw;
@@ -28,12 +29,15 @@ body {
 /* 主容器區塊 */
 .container {
     max-width: 900px;
-    margin: -50px auto 40px auto;
+    margin: 30px auto 40px auto;
     padding: 30px 20px;
     background-color: #fff;
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInContainer 1s 0.8s forwards;
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 .container:hover {
@@ -85,14 +89,9 @@ input[type="button"] {
     border-radius: 6px;
     cursor: pointer;
 }
-#btnSearch {
-    background-color: #1a73e8;
-    color: white;
-}
+#btnSearch { background-color: #1a73e8; color: white; }
 #btnSearch:hover { background-color: #0f5bd3; }
-#btnClear {
-    background-color: #ccc;
-}
+#btnClear { background-color: #ccc; }
 #btnClear:hover { background-color: #aaa; }
 
 /* 查詢結果卡片 */
@@ -104,17 +103,8 @@ input[type="button"] {
     margin-bottom: 20px;
     text-align: left;
 }
-.card-title {
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-.card-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 6px;
-}
+.card-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
+.card-row { display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 6px; }
 .card-label { color: #555; font-weight: 600; flex: 1 1 40%; }
 .card-value { flex: 1 1 55%; text-align: right; }
 .status-received { color: green; font-weight: bold; }
@@ -123,12 +113,15 @@ input[type="button"] {
 .status-signed { color: blue; font-weight: bold; }
 .no-data { text-align: center; color: red; font-size: 18px; margin-top: 30px; }
 
-/* LOGO 淡入動畫 */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-30px); }
+/* LOGO / Container 淡入動畫 */
+@keyframes fadeInLogo {
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInContainer {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* 手機自適應淡入縮放 */
 @media screen and (max-width:600px){
     input[type="text"] { width: 100%; }
     .card-row { flex-direction: column; align-items: flex-start; }
@@ -228,7 +221,7 @@ function cleanAll(){
     document.getElementById("uid").value="";
 }
 
-// 綁定按鈕事件
+// 綁定按鈕事件（保證按鈕完全可用）
 document.getElementById('btnSearch').addEventListener('click', function(){
     const uid = document.getElementById('uid').value.trim();
     if(uid) showHint(uid);
